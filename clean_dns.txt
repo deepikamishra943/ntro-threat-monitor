@@ -1,0 +1,9 @@
+172.16.16.154	www.espn.com
+172.16.16.154	espn.go.com
+172.16.16.154	cdn.optimizely.com
+172.16.16.154	a1.espncdn.com
+172.16.16.154	assets.espn.go.com
+172.16.16.154	a2.espncdn.com
+172.16.16.154	a4.espncdn.com
+192.168.1.99	zxczxczxczxczxcbadguy.com
+10.0.9.99	zzxxccvvbbnnmmkkjhg.com
