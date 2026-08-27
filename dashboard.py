@@ -5,15 +5,13 @@ import time
 from collections import Counter
 from sklearn.ensemble import IsolationForest
 
-# --- PAGE SETUP ---
 st.set_page_config(page_title="NTRO Threat Monitor", page_icon="🛡️", layout="wide")
-st.title("🛡️ NTRO Unidirectional Threat Monitor (LIVE 🔴)")
-st.markdown("Real-time passive AI/ML pipeline for detecting zero-day network threats.")
+st.title("🛡️ NTRO Unidirectional Threat Monitor (PROD 🔴)")
+st.markdown("Enterprise pipeline natively ingesting Zeek network sensors.")
 st.markdown("---")
 
-# --- AI BRAIN FUNCTIONS ---
 def calculate_entropy(text):
-    if not text: return 0
+    if not text or text == '-': return 0
     entropy = 0
     for x in set(text):
         p_x = float(text.count(x)) / len(text)
@@ -27,18 +25,37 @@ def extract_features(website):
     entropy = calculate_entropy(website)
     return [length, vowel_ratio, entropy]
 
-# --- LOAD DATA ---
+# --- ENTERPRISE ZEEK PARSER ---
 websites = []
 ips = []
 
-with open("clean_dns.txt", "r") as file:
-    for line in file:
-        cols = line.split()
-        if len(cols) == 2:
-            ips.append(cols[0])
-            websites.append(cols[1])
+try:
+    with open("dns.log", "r") as file:
+        ip_idx = -1
+        query_idx = -1
+        
+        for line in file:
+            # Dynamically map columns based on Zeek's header
+            if line.startswith("#fields"):
+                headers = line.strip().split("\t")
+                ip_idx = headers.index("id.orig_h")
+                query_idx = headers.index("query")
+            
+            # Read the actual traffic, skipping comments
+            elif not line.startswith("#") and ip_idx != -1 and query_idx != -1:
+                cols = line.strip().split("\t")
+                if len(cols) > max(ip_idx, query_idx):
+                    ip = cols[ip_idx]
+                    query = cols[query_idx]
+                    
+                    # Zeek uses '-' if a query is empty/missing
+                    if query != '-':
+                        ips.append(ip)
+                        websites.append(query)
+except FileNotFoundError:
+    st.error("Waiting for Zeek sensor to generate dns.log...")
 
-# --- THREAT C: DGA DETECTION (Machine Learning) ---
+# --- THREAT C: DGA DETECTION ---
 X_data = [extract_features(site) for site in websites]
 model = IsolationForest(n_estimators=100, contamination=0.1, random_state=42)
 if len(X_data) > 0:
@@ -47,58 +64,38 @@ if len(X_data) > 0:
 else:
     dga_predictions = []
 
-# --- THREAT A: DDoS DETECTION (Flow-Rate Analysis) ---
-# Count how many times each IP address appears in our traffic
+# --- THREAT A: DDoS DETECTION ---
 ip_counts = Counter(ips)
-DDOS_THRESHOLD = 50 # If an IP sends more than 50 requests instantly, flag it!
+DDOS_THRESHOLD = 50
 
-# --- SCOREBOARD UI ---
-total_traffic = len(ips)
+# --- UI RENDERING ---
 col1, col2, col3 = st.columns(3)
-col1.metric("🌐 Total Flows Analyzed", total_traffic)
-col2.metric("🔒 System Status", "ACTIVE - PASSIVE MODE")
-col3.metric("⏱️ Refresh Rate", "2.0s")
-
+col1.metric("🌐 Total Flows Analyzed", len(ips))
+col2.metric("🔒 Sensor", "Zeek Native Integration")
+col3.metric("⏱️ Mode", "Live Streaming")
 st.markdown("---")
 
-# --- DISPLAY THREAT A (DDoS) ---
-st.markdown("### 💥 Threat A: Volumetric DDoS Alerts")
-ddos_list = []
-for ip, count in ip_counts.items():
-    if count >= DDOS_THRESHOLD:
-        ddos_list.append({
-            "Attacker IP": ip,
-            "Flow Volume": f"{count} packets/sec",
-            "Detection Method": "Rate-Limit Exceeded",
-            "Severity": "CRITICAL"
-        })
-
-if len(ddos_list) > 0:
+st.markdown("### 💥 Threat A: Volumetric Alerts")
+ddos_list = [{"Attacker IP": ip, "Flow Volume": count} for ip, count in ip_counts.items() if count >= DDOS_THRESHOLD]
+if ddos_list:
     st.dataframe(pd.DataFrame(ddos_list), use_container_width=True)
-    st.error(f"⚠️ DDOS AVALANCHE DETECTED: {len(ddos_list)} IP(s) exceeding normal flow rates.")
 else:
-    st.success("✅ Flow rates normal. No DDoS detected.")
+    st.success("✅ Flow rates normal.")
 
-# --- DISPLAY THREAT C (DGA) ---
 st.markdown("### 🦠 Threat C: DGA Malware Alerts")
 dga_list = []
 for i in range(len(dga_predictions)):
-    if dga_predictions[i] == -1:
-        feats = X_data[i]
+    if dga_predictions[i] == -1 and X_data[i][2] > 3.0: # Only flag high entropy
         dga_list.append({
             "Source IP": ips[i],
             "Malicious Domain": websites[i],
-            "Entropy Score": round(feats[2], 2),
-            "Confidence": "HIGH (Isolation Forest)"
+            "Entropy Score": round(X_data[i][2], 2)
         })
 
-if len(dga_list) > 0:
-    # We use head(5) to only show the top 5 so a DDoS attack doesn't break our screen!
-    st.dataframe(pd.DataFrame(dga_list).head(5), use_container_width=True)
-    st.warning("⚠️ DGA Beaconing detected. Do not establish return paths.")
+if dga_list:
+    st.dataframe(pd.DataFrame(dga_list).head(10), use_container_width=True)
 else:
-    st.success("✅ Network Secure. No DGA anomalies.")
+    st.success("✅ Network Secure.")
 
-# --- LIVE STREAMING LOOP ---
 time.sleep(2)
 st.rerun()
