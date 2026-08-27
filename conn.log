@@ -1,0 +1,16 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	conn
+#open	2026-08-27-07-10-10
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	local_resp	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents	ip_proto
+#types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	bool	count	string	count	count	count	count	set[string]	count
+1452286755.346584	CzSH1X1i88lL0ozBRc	172.16.16.154	57434	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	106	-	17
+1452286755.558135	CUTIqF2JSslh3xHsqi	172.16.16.154	22689	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	96	-	17
+1452286755.846451	CFrOKn9aOvV2IYdl2	172.16.16.154	52723	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	146	-	17
+1452286755.847604	C2ge4nrxIPUKHPhWe	172.16.16.154	23201	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	163	-	17
+1452286755.898379	CNbX7V1i93b41KzZ64	172.16.16.154	57920	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	171	-	17
+1452286755.979495	Cwjq9d49Z87H367Kj	172.16.16.154	49283	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	163	-	17
+1452286755.983886	CCJ2t31E3GaJmGYLf9	172.16.16.154	21916	4.2.2.1	53	udp	dns	-	-	-	SHR	T	F	0	^d	0	0	1	163	-	17
+#close	2026-08-27-07-10-10

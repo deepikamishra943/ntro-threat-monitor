@@ -1,0 +1,16 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	dns
+#open	2026-08-27-07-10-10
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	trans_id	rtt	query	qclass	qclass_name	qtype	qtype_name	rcode	rcode_name	AA	TC	RD	RA	Z	answers	TTLs	rejected	opcode	opcode_name
+#types	time	string	addr	port	addr	port	enum	count	interval	string	count	string	count	string	count	string	bool	bool	bool	bool	count	vector[string]	vector[interval]	bool	count	string
+1452286755.346584	CzSH1X1i88lL0ozBRc	172.16.16.154	57434	4.2.2.1	53	udp	45323	-	www.espn.com	-	-	-	-	0	NOERROR	F	F	F	T	0	redir.espn.gns.go.com,68.71.212.158	225.000000,223.000000	F	0	query
+1452286755.558135	CUTIqF2JSslh3xHsqi	172.16.16.154	22689	4.2.2.1	53	udp	62548	-	espn.go.com	-	-	-	-	0	NOERROR	F	F	F	T	0	espn.gns.go.com,199.181.133.61	143.000000,4.000000	F	0	query
+1452286755.846451	CFrOKn9aOvV2IYdl2	172.16.16.154	52723	4.2.2.1	53	udp	23958	-	cdn.optimizely.com	-	-	-	-	0	NOERROR	F	F	F	T	0	wac.946a.edgecastcdn.net,gp1.wac.v2cdn.net,72.21.91.8	11.000000,1357.000000,2664.000000	F	0	query
+1452286755.847604	C2ge4nrxIPUKHPhWe	172.16.16.154	23201	4.2.2.1	53	udp	51903	-	a1.espncdn.com	-	-	-	-	0	NOERROR	F	F	F	T	0	a.espncdn.com.edgesuite.net,a1589.g1.akamai.net,72.246.56.35,72.246.56.83	134.000000,10943.000000,13.000000,13.000000	F	0	query
+1452286755.898379	CNbX7V1i93b41KzZ64	172.16.16.154	57920	4.2.2.1	53	udp	59318	-	assets.espn.go.com	-	-	-	-	0	NOERROR	F	F	F	T	0	assets.espn.go.com.edgesuite.net,a1589.g.akamai.net,69.31.75.194,69.31.75.203	234.000000,18738.000000,8.000000,8.000000	F	0	query
+1452286755.979495	Cwjq9d49Z87H367Kj	172.16.16.154	49283	4.2.2.1	53	udp	49060	-	a2.espncdn.com	-	-	-	-	0	NOERROR	F	F	F	T	0	a.espncdn.com.edgesuite.net,a1589.g1.akamai.net,72.246.56.83,72.246.56.35	284.000000,11448.000000,13.000000,13.000000	F	0	query
+1452286755.983886	CCJ2t31E3GaJmGYLf9	172.16.16.154	21916	4.2.2.1	53	udp	9952	-	a4.espncdn.com	-	-	-	-	0	NOERROR	F	F	F	T	0	a.espncdn.com.edgesuite.net,a1589.g1.akamai.net,72.246.56.35,72.246.56.83	185.000000,11448.000000,13.000000,13.000000	F	0	query
+#close	2026-08-27-07-10-10
